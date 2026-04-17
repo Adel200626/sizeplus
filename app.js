@@ -111,7 +111,7 @@ function fetchProducts() {
                     // Extraire le nom du fichier depuis chemin Windows (ex: C:\...\92.jpg → photos/92.jpg)
                     const parts = imageRaw.replace(/\\/g, '/').split('/');
                     const filename = parts[parts.length - 1];
-                    if (filename) image = `photos/${filename}`;
+                    if (filename) image = filename;
                 }
 
                 const quantite = parseFloat(getVal('quantite')) || 0;
