@@ -2,8 +2,7 @@
 const SHEET_ID = '16_Xc4pHKmNFIuNOExlOkZg1Pl6yV2REhPuthK6cM_kc';
 const WHATSAPP_NUMBER = '213784323036';
 
-// Photos disponibles (numéros de lignes du Google Sheet)
-// Ajoutez ici le numéro quand vous mettez une nouvelle photo dans le dossier const PHOTOS_DISPONIBLES = [92, 95, 100];
+// Photos disponibles sur GitHub Pages
 
 // ===== ÉTAT =====
 let products = [];
@@ -102,12 +101,8 @@ function fetchProducts() {
                     if (nouveauPrix === 0) nouveauPrix = prix;
                 }
 
-                // Photo : extraire le nom depuis le chemin Windows et mapper vers URL absolue
-                const PHOTO_URLS = {
-                    '92.jpg':  'https://adel200626.github.io/sizeplus/92.jpg',
-                    '95.jpg':  'https://adel200626.github.io/sizeplus/95.jpg',
-                    '100.jpg': 'https://adel200626.github.io/sizeplus/100.jpg'
-                };
+                // Photo : extraire le nom de fichier et construire l'URL automatiquement
+                const GITHUB_BASE = 'https://adel200626.github.io/sizeplus/';
                 let imageRaw = getVal('image') || '';
                 let image = '';
                 if (imageRaw.startsWith('http://') || imageRaw.startsWith('https://')) {
@@ -115,7 +110,9 @@ function fetchProducts() {
                 } else if (imageRaw) {
                     const parts = imageRaw.replace(/\\/g, '/').split('/');
                     const filename = parts[parts.length - 1];
-                    image = PHOTO_URLS[filename] || '';
+                    if (filename && /\.(jpg|jpeg|png|webp)$/i.test(filename)) {
+                        image = GITHUB_BASE + filename;
+                    }
                 }
 
                 const quantite = parseFloat(getVal('quantite')) || 0;
