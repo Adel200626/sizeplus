@@ -102,13 +102,21 @@ function fetchProducts() {
                     if (nouveauPrix === 0) nouveauPrix = prix;
                 }
 
-                // Photo : mapping direct par désignation (fiable à 100%)
-                const IMAGES = {
-                    'Haut Noir':  'https://adel200626.github.io/sizeplus/92.jpg',
-                    'Haut Kaki':  'https://adel200626.github.io/sizeplus/95.jpg',
-                    'Cardigan':   'https://adel200626.github.io/sizeplus/100.jpg'
+                // Photo : extraire le nom depuis le chemin Windows et mapper vers URL absolue
+                const PHOTO_URLS = {
+                    '92.jpg':  'https://adel200626.github.io/sizeplus/92.jpg',
+                    '95.jpg':  'https://adel200626.github.io/sizeplus/95.jpg',
+                    '100.jpg': 'https://adel200626.github.io/sizeplus/100.jpg'
                 };
-                const image = IMAGES[designation] || '';
+                let imageRaw = getVal('image') || '';
+                let image = '';
+                if (imageRaw.startsWith('http://') || imageRaw.startsWith('https://')) {
+                    image = imageRaw;
+                } else if (imageRaw) {
+                    const parts = imageRaw.replace(/\\/g, '/').split('/');
+                    const filename = parts[parts.length - 1];
+                    image = PHOTO_URLS[filename] || '';
+                }
 
                 const quantite = parseFloat(getVal('quantite')) || 0;
 
@@ -255,8 +263,8 @@ function imgError(el) {
 }
 
 function createCardHTML(p) {
-    // Référence = numéro extrait du nom de photo (ex: photos/92.jpg → 92)
-    const ref = p.image ? p.image.replace('photos/', '').replace('.jpg', '') : '';
+    // Référence = numéro extrait de l'URL (ex: .../92.jpg → 92)
+    const ref = p.image ? p.image.split('/').pop().replace('.jpg', '') : '';
 
     const imgHtml = p.image ? `
         <img class="card-img" src="${escapeHtml(p.image)}" alt="${escapeHtml(p.designation)}"
