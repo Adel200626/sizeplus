@@ -102,17 +102,13 @@ function fetchProducts() {
                     if (nouveauPrix === 0) nouveauPrix = prix;
                 }
 
-                // Photo : extraire le nom de fichier depuis le chemin Windows ou URL directe
-                let imageRaw = getVal('image') || '';
-                let image = '';
-                if (imageRaw.startsWith('http://') || imageRaw.startsWith('https://')) {
-                    image = imageRaw;
-                } else if (imageRaw) {
-                    // Extraire le nom du fichier depuis chemin Windows (ex: C:\...\92.jpg → photos/92.jpg)
-                    const parts = imageRaw.replace(/\\/g, '/').split('/');
-                    const filename = parts[parts.length - 1];
-                    if (filename) image = filename;
-                }
+                // Photo : mapping direct par désignation (fiable à 100%)
+                const IMAGES = {
+                    'Haut Noir':  'https://adel200626.github.io/sizeplus/92.jpg',
+                    'Haut Kaki':  'https://adel200626.github.io/sizeplus/95.jpg',
+                    'Cardigan':   'https://adel200626.github.io/sizeplus/100.jpg'
+                };
+                const image = IMAGES[designation] || '';
 
                 const quantite = parseFloat(getVal('quantite')) || 0;
 
