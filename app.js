@@ -180,6 +180,27 @@ function processData(data) {
         })
         .filter(p => p !== null);
 
+    // DIAGNOSTIC — à supprimer après résolution
+    const totalRows = data.table.rows.length;
+    const avecDesignation = products.length;
+    const enPromoCount = products.filter(p => p.enPromo).length;
+    const avecImage = products.filter(p => p.image).length;
+    const promoEtImage = products.filter(p => p.enPromo && p.image).length;
+
+    const debugDiv = document.createElement('div');
+    debugDiv.style.cssText = 'position:fixed;bottom:10px;left:10px;background:#111;color:#0f0;font-family:monospace;font-size:11px;padding:10px;border-radius:6px;z-index:9999;max-width:300px';
+    debugDiv.innerHTML = `
+        Lignes sheet : ${totalRows}<br>
+        Avec désignation : ${avecDesignation}<br>
+        En promo (OUI) : ${enPromoCount}<br>
+        Avec image : ${avecImage}<br>
+        Promo + image : ${promoEtImage}<br>
+        colMap.promotion : ${colMap.promotion ?? 'NON TROUVÉ'}<br>
+        colMap.image : ${colMap.image ?? 'NON TROUVÉ'}<br>
+        colMap.designation : ${colMap.designation ?? 'NON TROUVÉ'}
+    `;
+    document.body.appendChild(debugDiv);
+
     // Afficher uniquement les articles EN PROMO avec photo
     filteredProducts = products.filter(p => p.enPromo && p.image);
     renderProducts(filteredProducts);
